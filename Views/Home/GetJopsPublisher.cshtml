@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Jop_Offers_Website.Models.Jop>
+
+@{
+    ViewBag.Title = "GetJopsPublisher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All of my jobs </h2>
+
+<table class="table  table-stripped table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.jopTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.jopContent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.jopImg)
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.jopTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.jopContent)
+        </td>
+        <td>
+            <img src="@Url.Content(item.jopImg )"  />
+        </td>
+        
+        <td>
+
+            @Html.ActionLink("Details", "DetailsJopsPublisher", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "DeleteJopPublisher", new { id = item.Id }) |
+            @Html.ActionLink("Edite", "EditeJopPublisher", new { id = item.Id })
+        </td>
+    </tr>
+
+}
+
+</table>

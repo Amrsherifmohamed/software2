@@ -27,6 +27,50 @@ namespace Jop_Offers_Website.Controllers
             || a.Category.CategoryName.Contains(search));
             return View(r.ToList());
         }
+		
+		//Start Puplisher Page
+
+        [Authorize(Roles="Company")]
+        public ActionResult IndexPuplisher()// 
+        {
+            var userid = User.Identity.GetUserId();
+
+            var Jops = from app in db.ApplyForJops
+                       join jop in db.Jops
+                       on app.JopId equals jop.Id
+                       where jop.User.Id==userid
+                       select app;
+
+            var groub = from j in Jops
+                        group j by j.jop.jopTitle
+                        into gr
+                        select new ListUserOfJops
+                        {
+                            JopTitle = gr.Key,
+                            Items = gr
+                        };
+
+            return View(groub.ToList());
+        }
+        [Authorize(Roles = "Company")]
+       public ActionResult GetJopsPublisher() //
+        {
+            var UserId = User.Identity.GetUserId();
+            var jops = db.Jops.Where(a => a.UserId == UserId);
+            return View(jops.ToList());
+        }
+ [Authorize(Roles = "Company")]
+        public ActionResult DetailsJopsPublisher(int id)
+        {
+            var jop = db.Jops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+
 }
        
 }
