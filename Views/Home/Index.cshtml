@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Jop_Offers_Website.Models.Category>
+
+@{
+    ViewBag.Title = "Home Page";
+
+
+}
+<link href="~/Content/style.css" rel="stylesheet" />
+
+
+<div id="myCarousel" class="carousel slide" data-interval="3000" data-ride="carousel" style="margin:0; hight:10px">
+
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="~/Content/img/intro-bg.jpg" alt="First Slide">
+            <div class="carousel-caption">
+                <h1 class="special-heading">
+                    Find the Best Jobs in Egypt
+                </h1>
+
+                    <p class="k">
+                        Searching for vacancies & career opportunities? WUZZUF helps you in your job search in Egypt
+
+                    </p>
+                    <h1>FCIH TEAM</h1>
+                    <hr>
+                    <a href="#work" class="smoothScroll btn btn-danger"> LEARN .. MORE ..</a>
+</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+    @foreach (var item in Model)
+    {
+<div class="container">
+    <h1>@Html.DisplayFor(i => item.CategoryName)</h1>
+    <h5>@Html.DisplayFor(i => item.CategoryDescription)</h5>
+</div>
+       
+
+        <div class="row">
+            @*علشان اخلي لكل كاتيجوري الوظايف بتاعته*@
+
+            @foreach (var sitem in item.Jop)
+            {
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="#">
+                            <img src="@Url.Content(@sitem.jopImg )" style="width:100%" />
+                            <div class="display-field">
+                            </div>
+                            <div class="caption">
+                                <h2>@Html.DisplayFor(i => sitem.jopTitle)</h2>
+                                <p>@Html.DisplayFor(i => sitem.jopContent).</p>
+                                <p>
+                                    @Html.ActionLink("Details", "Details", new { jopid = sitem.Id }, new { @class = "btn btn-default" })
+                                </p>
+
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#myCarousel").carousel();
+            });
+        </script>
+    }
+
+
