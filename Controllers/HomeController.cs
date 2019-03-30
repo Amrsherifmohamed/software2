@@ -14,6 +14,33 @@ namespace Jop_Offers_Website.Controllers
 {
     public class HomeController : Controller
     {
+private ApplicationDbContext db = new ApplicationDbContext();
+
+        public ActionResult Index()//he4am
+        {
+
+            return View(db.Categories.ToList());
+        }
+
+        public ActionResult Details(int jopid)//he4am
+        {
+            var jop = db.Jops.Find(jopid);
+            if (jop == null)
+            {
+                return HttpNotFound();
+            }
+            Session["jopid"] = jopid;
+            return View(jop);
+
+        }
+
+        public ActionResult About()//he4am
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
 //search Bar
         public ActionResult Search() //amr
         {
