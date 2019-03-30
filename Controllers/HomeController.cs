@@ -124,6 +124,81 @@ private ApplicationDbContext db = new ApplicationDbContext();
             }
             return View(jop);
         }
+		
+		 [Authorize(Roles = "Company")]
+        public ActionResult DeleteJopPublisher(int id)
+        {
+            var jop = db.Jops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+        [Authorize(Roles = "Company")]
+        [HttpPost]
+        public ActionResult DeleteJopPublisher(Jop jop)
+        {
+
+            var jops = db.Jops.Find(jop.Id);
+            db.Jops.Remove(jops);
+            db.SaveChanges();
+            return RedirectToAction("GetJopsPublisherb ");
+
+        }
+        [Authorize(Roles = "Company")]
+        public ActionResult EditeJopPublisher(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Jop jop = db.Jops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "CategoryName", jop.CategoryId);
+            return View(jop);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditeJopPublisher(Jop jop, HttpPostedFileBase file)
+        {
+            if (file != null)
+            {
+                string oldpath = Path.GetFileNameWithoutExtension(file.FileName);
+                string extension1 = Path.GetExtension(file.FileName);
+                oldpath = oldpath + DateTime.Now.ToString("yymmssfff") + extension1;
+                jop.jopImg = "~/files/" + oldpath;
+                oldpath = Path.Combine(Server.MapPath("~/files/"), oldpath);
+                System.IO.File.Delete(oldpath);
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                string extension = Path.GetExtension(file.FileName);
+                fileName = fileName + DateTime.Now.ToString("yymmssfff") + extension;
+                jop.jopImg = "~/files/" + fileName;
+                fileName = Path.Combine(Server.MapPath("~/files/"), fileName);
+                file.SaveAs(fileName);
+                using (ApplicationDbContext db = new ApplicationDbContext())
+                {
+                    db.Entry(jop).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.Entry(jop).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.CategoryId = new SelectList(db.Categories, "Id", "CategoryName", jop.CategoryId);
+            return View(jop);
+            return RedirectToAction("GetJopsPublisher");
+        }
+        //End Puplisher Page
 
 }
        
