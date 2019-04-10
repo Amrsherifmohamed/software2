@@ -22,6 +22,26 @@ private ApplicationDbContext db = new ApplicationDbContext();
             return View(db.Categories.ToList());
         }
 
+
+
+public ActionResult GetJops()
+        {
+            var UserId = User.Identity.GetUserId();
+            var jops = db.ApplyForJops.Where(a => a.UserId == UserId);
+            return View(jops.ToList());
+        }
+
+        public ActionResult DetailsJops(int id)
+        {
+            var jop = db.ApplyForJops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+
         public ActionResult Details(int jopid)
         {
             var jop = db.Jops.Find(jopid);
