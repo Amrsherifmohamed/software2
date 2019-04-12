@@ -104,6 +104,35 @@ public ActionResult GetJops()
 		
 		//Start Puplisher Page
 
+[HttpGet]
+        public ActionResult Contact_witha_dmin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Contact_witha_dminContact_witha_dmin contact)
+        {
+            var mail = new MailMessage();
+
+            var logininfo = new NetworkCredential("asptest54321@gmail.com", "01013508764");
+            mail.From = new MailAddress(contact.Email);
+            mail.To.Add(new MailAddress("asptest54321@gmail.com"));
+            mail.Subject = contact.Subject;
+            mail.IsBodyHtml = true;
+
+            string body = "Name :" + contact.Name + "<br>" +
+                         "From :" + contact.Email + "<br>" +
+                         "Subject:" + contact.Subject + "<br>" +
+                         "Message:" + contact.Msg + "<br>";
+            mail.Body = body;
+
+            var smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.EnableSsl = true;
+            smtp.Credentials = logininfo;
+            smtp.Send(mail);
+            return RedirectToAction("Index");
+        }
+
         [Authorize(Roles="Company")]
         public ActionResult IndexPuplisher()// 
         {
