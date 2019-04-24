@@ -247,6 +247,28 @@ public ActionResult GetJops()
             return View(jop);
             return RedirectToAction("GetJopsPublisher");
         }
+   public ActionResult EditeJop(int id)
+        {
+            var jop = db.ApplyForJops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+	[HttpPost]
+        public ActionResult EditeJop(ApplyForJop jop)
+        {
+            if (ModelState.IsValid)
+            {
+                jop.ApplyDate = DateTime.Now;
+                db.Entry(jop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("GetJops");
+            }
+            return View(jop);
+        }
         //End Puplisher Page
 
 }
