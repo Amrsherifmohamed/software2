@@ -269,6 +269,26 @@ public ActionResult GetJops()
             }
             return View(jop);
         }
+public ActionResult DeleteJop(string id)
+        {
+            var jop = db.ApplyForJops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+       [HttpPost]
+    public ActionResult DeleteJop(ApplyForJop jop)
+        {
+
+            var jops = db.ApplyForJops.Find(jop.Id);
+            db.ApplyForJops.Remove(jops);
+            db.SaveChanges();
+            return RedirectToAction("GetJops");
+    
+        }
         //End Puplisher Page
 
 }
