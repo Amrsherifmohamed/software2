@@ -53,6 +53,19 @@ public ActionResult GetJops()
             return View(jop);
 
         }
+	
+public ActionResult Search_forJob() 
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Search(string search)
+        {
+            var r = db.Jops.Where(a => a.jopContent.Contains(search)
+            || a.jopTitle.Contains(search) 
+            || a.Category.CategoryName.Contains(search));
+            return View(r.ToList());
+        }
 
         public ActionResult About()
         {
@@ -132,6 +145,38 @@ public ActionResult GetJops()
             smtp.Send(mail);
             return RedirectToAction("Index");
         }
+[Authorize]
+        public ActionResult Apply()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Apply(string Msg)
+        {
+            var UserId = User.Identity.GetUserId();
+            var JopId = (int)Session["jopid"];
+
+            var apply = new ApplyForJop();
+            var check = db.ApplyForJops.Where(a => a.JopId == JopId && a.UserId == UserId).ToList();
+            if (check.Count < 1)
+            {
+                apply.UserId = UserId;
+                apply.JopId = JopId;
+                apply.Msg = Msg;
+                apply.ApplyDate = DateTime.Now;
+                db.ApplyForJops.Add(apply);
+                db.SaveChanges();
+                ViewBag.msge = "sucssed apply";
+            }
+            else
+            {
+                ViewBag.msge = "sorry you are applyed before";
+
+            }
+            return View();
+
+        }
 
         [Authorize(Roles="Company")]
         public ActionResult IndexPuplisher()// 
@@ -172,6 +217,35 @@ public ActionResult GetJops()
 
             }
             return View(jop);
+        }
+
+[HttpGet]
+        public ActionResult Contact_witha_dmin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Contact_witha_dminContact_witha_dmin contact)
+        {
+            var mail = new MailMessage();
+
+            var logininfo = new NetworkCredential("asptest54321@gmail.com", "01013508764");
+            mail.From = new MailAddress(contact.Email);
+            mail.To.Add(new MailAddress("asptest54321@gmail.com"));
+            mail.Subject = contact.Subject;
+            mail.IsBodyHtml = true;
+
+            string body = "Name :" + contact.Name + "<br>" +
+                         "From :" + contact.Email + "<br>" +
+                         "Subject:" + contact.Subject + "<br>" +
+                         "Message:" + contact.Msg + "<br>";
+            mail.Body = body;
+
+            var smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.EnableSsl = true;
+            smtp.Credentials = logininfo;
+            smtp.Send(mail);
+            return RedirectToAction("Index");
         }
 		
 		 [Authorize(Roles = "Company")]
@@ -268,6 +342,26 @@ public ActionResult GetJops()
                 return RedirectToAction("GetJops");
             }
             return View(jop);
+        }
+public ActionResult DeleteJop(string id)
+        {
+            var jop = db.ApplyForJops.Find(id);
+            if (jop == null)
+            {
+                return HttpNotFound();
+
+            }
+            return View(jop);
+        }
+       [HttpPost]
+    public ActionResult DeleteJop(ApplyForJop jop)
+        {
+
+            var jops = db.ApplyForJops.Find(jop.Id);
+            db.ApplyForJops.Remove(jops);
+            db.SaveChanges();
+            return RedirectToAction("GetJops");
+    
         }
 public ActionResult DeleteJop(string id)
         {
