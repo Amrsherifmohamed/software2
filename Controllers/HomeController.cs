@@ -14,7 +14,8 @@ namespace Jop_Offers_Website.Controllers
 {
     public class HomeController : Controller
     {
-private ApplicationDbContext db = new ApplicationDbContext();
+ApplicationDbContext db = ApplicationDbContext.GetInstance();
+
 
         public ActionResult Index()
         {

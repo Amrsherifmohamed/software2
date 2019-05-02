@@ -14,9 +14,8 @@ namespace Jop_Offers_Website.Controllers
 {
     public class JopsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-
+ApplicationDbContext db = ApplicationDbContext.GetInstance();
+      
 
         // GET: Jops/Create
         public ActionResult Create()//amr

@@ -16,7 +16,9 @@ namespace Jop_Offers_Website.Controllers
     //[Authorize(Roles ="user")]
     public class CategoriesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+
+      ApplicationDbContext db = ApplicationDbContext.GetInstance();
+
 
         // GET: Categories
         public ActionResult Index()

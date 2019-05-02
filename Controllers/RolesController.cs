@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Jop_Offers_Website.Controllers
 {
-    
+    ApplicationDbContext db = ApplicationDbContext.GetInstance();
     public class RolesController : Controller
     {
 	

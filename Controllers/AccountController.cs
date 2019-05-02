@@ -17,10 +17,10 @@ namespace Jop_Offers_Website.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private ApplicationDbContext db;
+        ApplicationDbContext db ;
         public AccountController()
         {
-            db = new ApplicationDbContext();
+            db = new ApplicationDbContext.GetInstance();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )

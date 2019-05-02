@@ -25,6 +25,19 @@ namespace Jop_Offers_Website.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
+private static ApplicationDbContext instant;
+        public static ApplicationDbContext GetInstance()
+        {
+            if (instant == null)
+            {
+                instant = new ApplicationDbContext();
+
+            }
+            return instant;
+
+        }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
